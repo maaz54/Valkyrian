@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Gameplay.UI;
+using SoundsPlayer;
 using UnityEngine;
 
 namespace Gameplay
@@ -10,6 +12,8 @@ namespace Gameplay
     public class GameplayManager : MonoBehaviour
     {
         [SerializeField] GridBoard gridBoard;
+        [SerializeField] MenuUi menuUi;
+        [SerializeField] SFXPlayer sFXPlayer;
         private List<Card> cards;
 
         private int cardsCheckingIndex;
@@ -21,6 +25,24 @@ namespace Gameplay
         private void Start()
         {
             gridBoard.OnCardsGenerated += OnCardsGenerated;
+            menuUi.OnPlayButton += OnPlayButton;
+            menuUi.OnHomeButton += OnHomeButton;
+            menuUi.OnRestartButton += OnRestartButton;
+            menuUi.OnNextButton += OnPlayButton;
+        }
+
+        private void OnPlayButton()
+        {
+            gridBoard.GenerateLevel();
+        }
+
+        private void OnHomeButton()
+        {
+            gridBoard.DestroyCards();
+        }
+
+        private void OnRestartButton()
+        {
             gridBoard.GenerateLevel();
         }
 
@@ -32,7 +54,6 @@ namespace Gameplay
             cardsCheckingIndex = 0;
             score = 0;
             turn = 0;
-
         }
 
 
@@ -41,27 +62,40 @@ namespace Gameplay
             cardsChecking[cardsCheckingIndex] = card;
             cardsCheckingIndex++;
             card.RevealCard();
+            sFXPlayer.PlayAudioClip("Rotate");
 
             if (cardsCheckingIndex >= 2)
             {
                 cardsCheckingIndex = 0;
-                _ = CheckMatchingCards();
+                CheckMatchingCards();
             }
         }
 
-        private async Task CheckMatchingCards()
+        private void CheckMatchingCards()
         {
             turn++;
             if (cardsChecking[0].Index == cardsChecking[1].Index)
             {
                 score++;
+                if (score >= gridBoard.totalTargetPairs)
+                {
+                    OnLevelComplete();
+                }
+                sFXPlayer.PlayAudioClip("Match");
             }
             else
             {
-                cardsChecking.ToList().ForEach(card => card.HideCard());
+                cardsChecking.ToList().ForEach(card => _ = card.HideCard());
+                sFXPlayer.PlayAudioClip("Unmatch");
             }
+            menuUi.UpdateScore(score, turn);
         }
 
+        private void OnLevelComplete()
+        {
+            menuUi.OnLevelComplete();
+            sFXPlayer.PlayAudioClip("Win");
 
+        }
     }
 }

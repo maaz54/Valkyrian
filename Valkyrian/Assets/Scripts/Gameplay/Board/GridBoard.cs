@@ -8,16 +8,11 @@ namespace Gameplay
     public class GridBoard : MonoBehaviour
     {
         [SerializeField] private Card[] cardPrefabs;
-        [SerializeField] private int totalTargetPairs;
         [SerializeField] private Transform cardsHolder;
         [SerializeField] private List<Card> cards;
 
+        public int totalTargetPairs;
         public Action<List<Card>> OnCardsGenerated;
-
-        void Start()
-        {
-
-        }
 
         [ContextMenu("GenerateLevel")]
         public void GenerateLevel()
@@ -50,7 +45,7 @@ namespace Gameplay
             }
         }
 
-        private void DestroyCards()
+        public void DestroyCards()
         {
             cards.ForEach(card => Destroy(card.gameObject));
             cards.Clear();
