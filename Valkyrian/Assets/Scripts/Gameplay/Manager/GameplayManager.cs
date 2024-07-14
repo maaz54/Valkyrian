@@ -71,6 +71,7 @@ namespace Gameplay
             this.cards = cards;
             cards.ForEach(card => card.OnCardClick += OnCardClick);
             cardsCheckingIndex = 0;
+            cardsChecking = new Card[2];
             cameraSize.OnCardsGenerate(gridBoard.noOfRow);
         }
 

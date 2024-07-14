@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6040083049142082186}
   - component: {fileID: 8356538371747083975}
   - component: {fileID: 2537781529984130238}
+  - component: {fileID: 1983050786042177097}
   m_Layer: 5
   m_Name: CardPrefab
   m_TagString: Untagged
@@ -109,10 +110,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8356538371747083976}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8356538372333597685}
   m_Father: {fileID: 0}
@@ -138,8 +139,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8079e7ed9471fbd418fa185c7806af33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 1983050786042177097}
   clickDetector: {fileID: 5552780388870210850}
   index: 0
+--- !u!95 &1983050786042177097
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8356538371747083976}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a5cc113b11f24ec458d6932784114fdf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8356538371823294068
 GameObject:
   m_ObjectHideFlags: 0

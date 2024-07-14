@@ -10,6 +10,7 @@ namespace Gameplay
 {
     public class Card : MonoBehaviour, IPoolableObject
     {
+        [SerializeField] private Animator animator;
         [SerializeField] private ClickDetector clickDetector;
         [SerializeField] private int index;
         public int Index => index;
@@ -55,7 +56,7 @@ namespace Gameplay
 
         public void RevealCard()
         {
-            transform.localEulerAngles = new(0, 180, 0);
+            animator.Play("Reveal");
             isRevealed = true;
         }
 
@@ -63,8 +64,8 @@ namespace Gameplay
         {
             if (!immediate)
                 await Task.Delay(TimeSpan.FromSeconds(.5f));
+            animator.Play("Hide");
             isRevealed = false;
-            transform.localEulerAngles = Vector3.zero;
         }
 
     }
