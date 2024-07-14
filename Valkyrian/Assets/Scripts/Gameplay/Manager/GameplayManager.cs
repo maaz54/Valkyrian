@@ -137,6 +137,7 @@ namespace Gameplay
             this.score = levelData.Score;
             this.turn = levelData.Turn;
             gridBoard.LoadSavedLevel(levelData);
+            menuUi.UpdateScore(score, turn);
         }
 
         private void OnLevelComplete()
