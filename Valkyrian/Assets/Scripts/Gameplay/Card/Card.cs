@@ -21,6 +21,19 @@ namespace Gameplay
         public Action<Card> OnCardClick;
 
         bool isRevealed = false;
+        public bool IsRevealed => isRevealed;
+
+        public void Initialize(SaveLoadController.CardData cardData)
+        {
+            if (cardData.IsRevealed)
+            {
+                RevealCard();
+            }
+            else
+            {
+                _ = HideCard();
+            }
+        }
 
         private void OnEnable()
         {
@@ -30,8 +43,8 @@ namespace Gameplay
         private void OnDisable()
         {
             clickDetector.OnClick -= OnClick;
-            _ = HideCard();
             OnCardClick = null;
+            _ = HideCard(true);
         }
 
         private void OnClick()
@@ -46,9 +59,10 @@ namespace Gameplay
             isRevealed = true;
         }
 
-        public async Task HideCard()
+        public async Task HideCard(bool immediate = false)
         {
-            await Task.Delay(TimeSpan.FromSeconds(.5f));
+            if (!immediate)
+                await Task.Delay(TimeSpan.FromSeconds(.5f));
             isRevealed = false;
             transform.localEulerAngles = Vector3.zero;
         }

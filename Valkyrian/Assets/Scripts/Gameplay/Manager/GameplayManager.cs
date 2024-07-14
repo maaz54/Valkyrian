@@ -17,6 +17,7 @@ namespace Gameplay
         [SerializeField] SFXPlayer sFXPlayer;
         [SerializeField] ObjectPooler objectPooler;
         [SerializeField] CameraSize cameraSize;
+        [SerializeField] SaveLoadController saveLoadController;
 
         private List<Card> cards;
 
@@ -29,10 +30,13 @@ namespace Gameplay
         private void Start()
         {
             gridBoard.OnCardsGenerated += OnCardsGenerated;
+            gridBoard.OnCardsGeneratedFromJson += OnCardsGeneratedFromJson;
             menuUi.OnPlayButton += OnPlayButton;
             menuUi.OnHomeButton += OnHomeButton;
             menuUi.OnRestartButton += OnRestartButton;
             menuUi.OnNextButton += OnPlayButton;
+            menuUi.OnSaveCurrentLevelButton += SaveData;
+            menuUi.OnLoadPreviousLevelButton += LoadData;
 
             gridBoard.Initialize(objectPooler);
         }
@@ -55,11 +59,18 @@ namespace Gameplay
         private void OnCardsGenerated(List<Card> cards)
         {
             this.cards = cards;
-
             cards.ForEach(card => card.OnCardClick += OnCardClick);
             cardsCheckingIndex = 0;
             score = 0;
             turn = 0;
+            cameraSize.OnCardsGenerate(gridBoard.noOfRow);
+        }
+
+        private void OnCardsGeneratedFromJson(List<Card> cards)
+        {
+            this.cards = cards;
+            cards.ForEach(card => card.OnCardClick += OnCardClick);
+            cardsCheckingIndex = 0;
             cameraSize.OnCardsGenerate(gridBoard.noOfRow);
         }
 
@@ -92,17 +103,45 @@ namespace Gameplay
             }
             else
             {
-                cardsChecking.ToList().ForEach(card => {_ = card.HideCard();});
+                cardsChecking.ToList().ForEach(card => { _ = card.HideCard(); });
                 sFXPlayer.PlayAudioClip("Unmatch");
             }
             menuUi.UpdateScore(score, turn);
+        }
+
+        public void SaveData()
+        {
+            List<SaveLoadController.CardData> cardData = new List<SaveLoadController.CardData>();
+
+            cards.ForEach(card => cardData.Add(new SaveLoadController.CardData
+            {
+                Index = card.Index,
+                IsRevealed = card.IsRevealed,
+            }));
+
+            SaveLoadController.LevelData levelData = new SaveLoadController.LevelData
+            {
+                Score = this.score,
+                Turn = this.turn,
+                TotalTargetPair = gridBoard.totalTargetPairs,
+                Cards = cardData
+            };
+
+            saveLoadController.SaveData(levelData, "LevelData");
+        }
+
+        public void LoadData()
+        {
+            SaveLoadController.LevelData levelData = saveLoadController.LoadData("LevelData");
+            this.score = levelData.Score;
+            this.turn = levelData.Turn;
+            gridBoard.LoadSavedLevel(levelData);
         }
 
         private void OnLevelComplete()
         {
             menuUi.OnLevelComplete();
             sFXPlayer.PlayAudioClip("Win");
-
         }
     }
 }

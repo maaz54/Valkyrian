@@ -29,6 +29,16 @@ namespace Gameplay.UI
         [SerializeField] Button nextButton;
 
         /// <summary>
+        /// Restart button in the menu UI
+        /// </summary>
+        [SerializeField] Button SaveButton;
+
+        /// <summary>
+        /// Restart button in the menu UI
+        /// </summary>
+        [SerializeField] Button LoadButton;
+
+        /// <summary>
         /// gameplay UI panel
         /// </summary>
         [SerializeField] GameObject gameplay;
@@ -68,6 +78,16 @@ namespace Gameplay.UI
         /// </summary>
         public Action OnNextButton;
 
+        /// <summary>
+        /// event when the Play button is clicked
+        /// </summary>
+        public Action OnLoadPreviousLevelButton;
+
+        /// <summary>
+        /// event when the Play button is clicked
+        /// </summary>
+        public Action OnSaveCurrentLevelButton;
+
         private void Start()
         {
             ButtonEvents();
@@ -95,6 +115,16 @@ namespace Gameplay.UI
             {
                 OpenGameplay();
                 OnNextButton?.Invoke();
+            });
+
+            LoadButton.onClick.AddListener(() =>
+            {
+                OnLoadPreviousLevelButton?.Invoke();
+            });
+
+            SaveButton.onClick.AddListener(() =>
+            {
+                OnSaveCurrentLevelButton?.Invoke();
             });
         }
 

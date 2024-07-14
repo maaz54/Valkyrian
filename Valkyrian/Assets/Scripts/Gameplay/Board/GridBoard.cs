@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ObjectPool.Interface;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace Gameplay
 
         public int totalTargetPairs;
         public Action<List<Card>> OnCardsGenerated;
+        public Action<List<Card>> OnCardsGeneratedFromJson;
 
         private IObjectPooler objectPooler;
 
@@ -42,7 +44,23 @@ namespace Gameplay
 
             PlaceObjects();
             OnCardsGenerated?.Invoke(cards);
+        }
 
+        public void LoadSavedLevel(SaveLoadController.LevelData levelData)
+        {
+            DestroyCards();
+            totalTargetPairs = levelData.TotalTargetPair;
+            foreach (var cardData in levelData.Cards)
+            {
+                Card card = objectPooler.Pool<Card>(cardPrefabs.First(c => c.Index == cardData.Index));
+                card.transform.localScale = Vector3.one * .01f;
+                card.Initialize(cardData);
+                cards.Add(card);
+            }
+
+            Shuffle(cards);
+            PlaceObjects();
+            OnCardsGeneratedFromJson?.Invoke(cards);
         }
 
         void Shuffle<T>(List<T> list)
