@@ -16,6 +16,7 @@ namespace Gameplay
         [SerializeField] MenuUi menuUi;
         [SerializeField] SFXPlayer sFXPlayer;
         [SerializeField] ObjectPooler objectPooler;
+        [SerializeField] CameraSize cameraSize;
 
         private List<Card> cards;
 
@@ -59,6 +60,8 @@ namespace Gameplay
             cardsCheckingIndex = 0;
             score = 0;
             turn = 0;
+            // cameraSize.OnCardsGenerate(cards.Select(card => card.transform).ToArray());
+            cameraSize.OnCardsGenerate(gridBoard.noOfRow);
         }
 
 
