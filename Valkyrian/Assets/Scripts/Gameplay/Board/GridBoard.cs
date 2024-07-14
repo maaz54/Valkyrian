@@ -61,7 +61,6 @@ namespace Gameplay
 
         public void DestroyCards()
         {
-            // cards.ForEach(card => Destroy(card.gameObject));
             cards.ForEach(card => objectPooler.Remove(card));
             cards.Clear();
         }
@@ -85,7 +84,6 @@ namespace Gameplay
                 for (int col = numPerRow - 1; col >= 0; col--)
                 {
                     // Calculate the position for the current object
-                    // Vector3 position = new Vector3(col + xSpacing, 0f, row + spacing);
                     Vector3 position = new Vector3(col * xSpacing, row * ySpacing, 0);
 
                     if (i < cards.Count)
@@ -109,8 +107,6 @@ namespace Gameplay
             return bound.center;
 
         }
-
-
 
     }
 }

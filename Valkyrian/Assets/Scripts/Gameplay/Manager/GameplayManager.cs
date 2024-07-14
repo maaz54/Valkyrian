@@ -60,7 +60,6 @@ namespace Gameplay
             cardsCheckingIndex = 0;
             score = 0;
             turn = 0;
-            // cameraSize.OnCardsGenerate(cards.Select(card => card.transform).ToArray());
             cameraSize.OnCardsGenerate(gridBoard.noOfRow);
         }
 
