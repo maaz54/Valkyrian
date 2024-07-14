@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gameplay.UI;
+using ObjectPool;
 using SoundsPlayer;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ namespace Gameplay
         [SerializeField] GridBoard gridBoard;
         [SerializeField] MenuUi menuUi;
         [SerializeField] SFXPlayer sFXPlayer;
+        [SerializeField] ObjectPooler objectPooler;
+
         private List<Card> cards;
 
         private int cardsCheckingIndex;
@@ -29,6 +32,8 @@ namespace Gameplay
             menuUi.OnHomeButton += OnHomeButton;
             menuUi.OnRestartButton += OnRestartButton;
             menuUi.OnNextButton += OnPlayButton;
+
+            gridBoard.Initialize(objectPooler);
         }
 
         private void OnPlayButton()
@@ -85,7 +90,7 @@ namespace Gameplay
             }
             else
             {
-                cardsChecking.ToList().ForEach(card => _ = card.HideCard());
+                cardsChecking.ToList().ForEach(card => {_ = card.HideCard();});
                 sFXPlayer.PlayAudioClip("Unmatch");
             }
             menuUi.UpdateScore(score, turn);
